@@ -43,10 +43,7 @@ public class SecurityConfig {
                             "/api/v1/auth/refresh",
                             "/api/v1/auth/register",
                             "/v1/**",
-                            "/api/v1/image/**",
-                            "/api/v1/template/getTemplates",
-                            "api/v1/menuCategory/getAllMenu",
-                            "/api/v1/menuItem/getMenuItemByName"
+                            "/api/v1/image/**"
                     ).permitAll();
                     auth.requestMatchers("/api/v1/**").authenticated();
                 })
