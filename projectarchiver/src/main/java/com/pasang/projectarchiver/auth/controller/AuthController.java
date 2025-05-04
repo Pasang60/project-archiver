@@ -12,10 +12,7 @@ import com.pasang.projectarchiver.global.GlobalApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,4 +29,15 @@ public class AuthController extends BaseController {
     public ResponseEntity<GlobalApiResponse> login(@RequestBody AuthRequest authRequest) {
         return successResponse(authService.login(authRequest), SystemMessage.USER_LOGGED_IN_MSG);
     }
+
+    @Operation(
+            summary = AuthSwaggerDocumentationMessage.CREATE_LOGOUT_SUMMARY,
+            description = AuthSwaggerDocumentationMessage.CREATE_LOGOUT_DESCRIPTION
+    )
+    @GetMapping()
+    public ResponseEntity<GlobalApiResponse> logout() {
+        authService.logout();
+        return successResponse(SystemMessage.USER_LOGGED_OUT_MSG);
+    }
+
 }
