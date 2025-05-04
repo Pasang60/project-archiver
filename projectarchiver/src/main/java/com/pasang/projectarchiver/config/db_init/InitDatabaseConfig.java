@@ -48,6 +48,7 @@ public class InitDatabaseConfig {
             user.setRole(List.of(role));
             user.setIsActive(true);
             user.setIsDeleted(false);
+            user.setIsVerified(true);
             userRepository.save(user);
             log.info("Super admin role user created");
         }

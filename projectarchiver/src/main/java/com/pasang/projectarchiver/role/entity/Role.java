@@ -1,5 +1,6 @@
 package com.pasang.projectarchiver.role.entity;
 
+import com.pasang.projectarchiver.global.Auditable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Role {
+public class Role extends Auditable {
     public static final String ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
     public static final String ROLE_USER = "ROLE_USER";
 

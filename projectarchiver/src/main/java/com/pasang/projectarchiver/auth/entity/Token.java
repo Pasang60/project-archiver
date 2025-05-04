@@ -3,10 +3,8 @@ package com.pasang.projectarchiver.auth.entity;
  * @author Pasang Gelbu Sherpa *
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.pasang.projectarchiver.users.entity.Users;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +18,8 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tokenId;
 
-    private String token;
+    private String accessToken;
+    @OneToOne
+    private Users user;
+    private Boolean isExpired;
 }
