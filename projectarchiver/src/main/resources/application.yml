@@ -15,7 +15,7 @@ spring:
   jpa:
     show_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 application:
   security:
@@ -27,6 +27,17 @@ application:
 
     refresh-token:
       expiration: 86400000 # 1 day
+
+app:
+  filepath:
+    windows: D:\\project_archiver\\
+    linux: /home/user/project_archiver/
+    mac: /Users/project_archiver/
+
+otp:
+  length: 6         # Length of OTP
+  alphanumeric: false # true for alphanumeric, false for numeric
+  expiryInSeconds: 300 # OTP expiry time in seconds (5 minutes)
 
 springdoc:
   api-docs:

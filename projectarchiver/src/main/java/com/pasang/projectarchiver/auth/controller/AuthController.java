@@ -34,7 +34,7 @@ public class AuthController extends BaseController {
             summary = AuthSwaggerDocumentationMessage.CREATE_LOGOUT_SUMMARY,
             description = AuthSwaggerDocumentationMessage.CREATE_LOGOUT_DESCRIPTION
     )
-    @GetMapping()
+    @GetMapping("/logout")
     public ResponseEntity<GlobalApiResponse> logout() {
         authService.logout();
         return successResponse(SystemMessage.USER_LOGGED_OUT_MSG);

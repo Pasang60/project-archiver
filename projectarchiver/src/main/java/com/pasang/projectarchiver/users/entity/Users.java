@@ -22,10 +22,21 @@ public class Users extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, name = "FULL_NAME")
     private String fullName;
+
+    @Column(nullable = false, name = "EMAIL_ID", unique = true)
     private String email;
+
+    @Column(name = "PASSWORD")
     private String password;
+
+    @Column(name = "PHONE")
     private String phone;
+    private String profilePic;
+
+    @Column(name = "ADDRESS")
     private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
