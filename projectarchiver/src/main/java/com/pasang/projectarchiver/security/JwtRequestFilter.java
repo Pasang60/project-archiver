@@ -39,9 +39,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws IOException, ServletException {
         if (
                 request.getRequestURI().startsWith("/api/v1/auth/login")
-                        || request.getRequestURI().startsWith("/api/v1/auth/register")
+                        || request.getRequestURI().startsWith("/api/v1/users/register")
                         || request.getRequestURI().startsWith("/api/v1/auth/refresh")
-                        || request.getRequestURI().startsWith("/api/v1/image/getImage")
+                        || request.getRequestURI().startsWith("/files/")
                         || request.getRequestURI().startsWith("/v1")
 
         ) {

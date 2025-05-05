@@ -41,12 +41,9 @@ public class SecurityConfig {
                     auth.requestMatchers(
                             "/api/v1/auth/login",
                             "/api/v1/auth/refresh",
-                            "/api/v1/auth/register",
+                            "/api/v1/users/register",
                             "/v1/**",
-                            "/api/v1/image/**",
-                            "/api/v1/template/getTemplates",
-                            "api/v1/menuCategory/getAllMenu",
-                            "/api/v1/menuItem/getMenuItemByName"
+                            "/files/**"
                     ).permitAll();
                     auth.requestMatchers("/api/v1/**").authenticated();
                 })
