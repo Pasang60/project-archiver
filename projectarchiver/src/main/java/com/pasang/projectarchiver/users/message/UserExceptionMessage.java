@@ -2,6 +2,7 @@ package com.pasang.projectarchiver.users.message;
 
 public class UserExceptionMessage {
     public static final String INVALID_PHONE_NUMBER = "Phone number is not valid";
+    public static final String USER_NOT_VERIFIED = "User is not verified";
 
     private UserExceptionMessage() {}
     public static final String USER_NOT_FOUND = "User not found. ";

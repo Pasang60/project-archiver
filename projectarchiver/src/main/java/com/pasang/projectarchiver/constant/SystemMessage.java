@@ -21,4 +21,6 @@ public class SystemMessage {
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String USER_LOGGED_IN_MSG = "User logged in successfully";
     public static final String USER_REGISTERED = "User registered successfully";
+    public static final String OTP_VERIFIED = "OTP verified successfully";
+    public static final String PASSWORD_SET = "Password set successfully";
 }

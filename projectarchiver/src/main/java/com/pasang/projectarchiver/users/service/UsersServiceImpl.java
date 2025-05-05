@@ -6,7 +6,9 @@ import com.pasang.projectarchiver.otp.entity.OTPPurpose;
 import com.pasang.projectarchiver.otp.service.OTPService;
 import com.pasang.projectarchiver.role.entity.Role;
 import com.pasang.projectarchiver.role.repository.RoleRepository;
+import com.pasang.projectarchiver.users.dto.request.PasswordRequest;
 import com.pasang.projectarchiver.users.dto.request.UsersRegistrationRequest;
+import com.pasang.projectarchiver.users.dto.request.ValidateOtpRequest;
 import com.pasang.projectarchiver.users.dto.response.UsersResponse;
 import com.pasang.projectarchiver.users.entity.Users;
 import com.pasang.projectarchiver.users.message.UserExceptionMessage;
@@ -16,8 +18,10 @@ import com.pasang.projectarchiver.utils.file.FileHandlerUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
@@ -60,5 +64,37 @@ public class UsersServiceImpl implements UsersService{
 
         return new UsersResponse(user);
 
+    }
+
+    @Override
+    public String validateOtp(ValidateOtpRequest otpRequest) {
+        log.info("Validating OTP for user" );
+        Users user = usersRepository.findByEmail(otpRequest.getEmail()).orElseThrow(
+                () -> new IllegalArgumentException(UserExceptionMessage.USER_NOT_FOUND + otpRequest.getEmail())
+        );
+        otpService.validateOTP(user, otpRequest.getOtp());
+            user.setIsVerified(true);
+            usersRepository.save(user);
+            return "User verified successfully";
+    }
+
+    @Override
+    public String setPassword(PasswordRequest passwordRequest) {
+        log.info("Setting password for user" );
+        Users user = usersRepository.findByEmail(passwordRequest.getEmail()).orElseThrow(
+                () -> new IllegalArgumentException(UserExceptionMessage.USER_NOT_FOUND + passwordRequest.getEmail())
+        );
+        if (Boolean.TRUE.equals(user.getIsVerified())) {
+            if (passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
+                user.setPassword(new BCryptPasswordEncoder().encode(passwordRequest.getPassword()));
+            } else {
+                log.warn("Password didn't match");
+                throw new IllegalArgumentException("Password doesn't match.");
+            }
+            usersRepository.save(user);
+            return "Password set successfully";
+        } else {
+            throw new IllegalArgumentException(UserExceptionMessage.USER_NOT_VERIFIED + passwordRequest.getEmail());
+        }
     }
 }
