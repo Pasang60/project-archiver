@@ -12,7 +12,7 @@ import com.pasang.projectarchiver.security.JwtUtil;
 import com.pasang.projectarchiver.security.UserDetailsServiceImpl;
 import com.pasang.projectarchiver.users.entity.Users;
 import com.pasang.projectarchiver.users.repository.UsersRepository;
-import com.pasang.projectarchiver.utils.LoggedInUser;
+import com.pasang.projectarchiver.utils.logged_in_user.LoggedInUser;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

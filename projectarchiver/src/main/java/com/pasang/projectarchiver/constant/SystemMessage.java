@@ -20,4 +20,5 @@ public class SystemMessage {
     public static final String INVALID_TOKEN = "Invalid token";
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String USER_LOGGED_IN_MSG = "User logged in successfully";
+    public static final String USER_REGISTERED = "User registered successfully";
 }
