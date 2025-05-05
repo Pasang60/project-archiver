@@ -8,7 +8,7 @@ package com.pasang.projectarchiver.users.controller;
 import com.pasang.projectarchiver.constant.SystemMessage;
 import com.pasang.projectarchiver.global.BaseController;
 import com.pasang.projectarchiver.global.GlobalApiResponse;
-import com.pasang.projectarchiver.users.dto.UsersRegistrationRequest;
+import com.pasang.projectarchiver.users.dto.request.UsersRegistrationRequest;
 import com.pasang.projectarchiver.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
