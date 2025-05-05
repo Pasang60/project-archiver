@@ -39,6 +39,8 @@ public class Users extends Auditable {
     @Column(name = "ADDRESS")
     private String address;
 
+    private boolean status;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

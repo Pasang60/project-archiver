@@ -27,8 +27,8 @@ public class InitDatabaseConfig {
         if(roleRepository.findAll().isEmpty()) {
             log.info("Creating roles");
             List<Role> roles = List.of(
-                    new Role(null, "ROLE_SUPER_ADMIN", "Super Admin Role"),
-                    new Role(null, "ROLE_ADMIN", "Admin Role")
+                    new Role(null, "ROLE_ADMIN", "Super Admin Role"),
+                    new Role(null, "ROLE_USER", "Admin Role")
             );
             roleRepository.saveAll(roles);
             log.info("Roles created");
@@ -42,7 +42,7 @@ public class InitDatabaseConfig {
             user.setPhone("9840757252");
             user.setAddress("Kathmandu, Nepal");
             user.setPassword(new BCryptPasswordEncoder().encode(PASSWORD));
-            Role role = roleRepository.findByName(Role.ROLE_SUPER_ADMIN).orElseThrow(
+            Role role = roleRepository.findByName(Role.ROLE_ADMIN).orElseThrow(
                     () -> new RuntimeException(SystemMessage.ROLE_NOT_FOUND)
             );
             user.setRole(List.of(role));
