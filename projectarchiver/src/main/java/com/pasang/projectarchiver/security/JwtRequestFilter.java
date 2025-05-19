@@ -43,6 +43,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         || request.getRequestURI().startsWith("/api/v1/auth/refresh")
                         || request.getRequestURI().startsWith("/files/")
                         || request.getRequestURI().startsWith("/v1")
+                        || request.getRequestURI().startsWith("/api/v1/users/validate")
+                        || request.getRequestURI().startsWith("/api/v1/users/set-password")
 
         ) {
             filterChain.doFilter(request, response);
