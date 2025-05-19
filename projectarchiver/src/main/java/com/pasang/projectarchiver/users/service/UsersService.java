@@ -1,6 +1,7 @@
 package com.pasang.projectarchiver.users.service;
 
 import com.pasang.projectarchiver.users.dto.request.PasswordRequest;
+import com.pasang.projectarchiver.users.dto.request.UpdateUserRequest;
 import com.pasang.projectarchiver.users.dto.request.UsersRegistrationRequest;
 import com.pasang.projectarchiver.users.dto.request.ValidateOtpRequest;
 import com.pasang.projectarchiver.users.dto.response.UsersResponse;
@@ -11,4 +12,6 @@ public interface UsersService {
     String validateOtp(ValidateOtpRequest validateOtpRequest);
 
     String setPassword(PasswordRequest passwordRequest);
+
+    UsersResponse updateUser(UpdateUserRequest updateUserRequest);
 }

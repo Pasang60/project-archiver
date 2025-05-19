@@ -26,7 +26,7 @@ public class SwaggerConfig {
                         ("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("Project Archiver REST API")
                         .description("It is a API doc for project archiver.")
-                        .version("1.0").contact(new Contact().name("QRBhojan")
+                        .version("1.0").contact(new Contact().name("Project Archiver")
                                 .email( "projectarchiever@gmail.com").url("https://www.projectarchiever.com.np"))
                         .license(new License().name("License of API")
                                 .url("API license URL")));

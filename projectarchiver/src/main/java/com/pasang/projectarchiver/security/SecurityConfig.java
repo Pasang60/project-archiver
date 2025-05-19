@@ -44,7 +44,8 @@ public class SecurityConfig {
                             "/api/v1/users/register",
                             "/v1/**",
                             "/files/**",
-                            "api/v1/users/validate"
+                            "api/v1/users/validate",
+                            "api/v1/users/set-password"
                     ).permitAll();
                     auth.requestMatchers("/api/v1/**").authenticated();
                 })

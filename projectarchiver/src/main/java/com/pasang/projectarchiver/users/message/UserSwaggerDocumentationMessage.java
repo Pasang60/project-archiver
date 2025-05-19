@@ -1,6 +1,9 @@
 package com.pasang.projectarchiver.users.message;
 
 public class UserSwaggerDocumentationMessage {
+    public static final String UPDATE_USER_SUMMARY = "Update User";
+    public static final String UPDATE_USER_DESCRIPTION = "Update the profile of the user";
+
     private UserSwaggerDocumentationMessage() {}
 
     public static final String ADD_USER_SUMMARY = "Add a new user";

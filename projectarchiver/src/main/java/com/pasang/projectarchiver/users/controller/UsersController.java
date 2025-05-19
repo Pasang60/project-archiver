@@ -9,6 +9,7 @@ import com.pasang.projectarchiver.constant.SystemMessage;
 import com.pasang.projectarchiver.global.BaseController;
 import com.pasang.projectarchiver.global.GlobalApiResponse;
 import com.pasang.projectarchiver.users.dto.request.PasswordRequest;
+import com.pasang.projectarchiver.users.dto.request.UpdateUserRequest;
 import com.pasang.projectarchiver.users.dto.request.UsersRegistrationRequest;
 import com.pasang.projectarchiver.users.dto.request.ValidateOtpRequest;
 import com.pasang.projectarchiver.users.message.UserSwaggerDocumentationMessage;
@@ -42,12 +43,21 @@ public class UsersController extends BaseController {
         return successResponse(usersService.validateOtp(validateOtpRequest), SystemMessage.OTP_VERIFIED);
     }
 
+    @PostMapping("/set-password")
     @Operation(
             summary = UserSwaggerDocumentationMessage.SET_PASSWORD_SUMMARY,
             description = UserSwaggerDocumentationMessage.SET_PASSWORD_DESCRIPTION
     )
-    @PostMapping("/set-password")
     public ResponseEntity<GlobalApiResponse> setPassword(@RequestBody PasswordRequest passwordRequest) {
         return successResponse(usersService.setPassword(passwordRequest), SystemMessage.PASSWORD_SET);
+    }
+
+    @PutMapping("/update")
+    @Operation(
+            summary = UserSwaggerDocumentationMessage.UPDATE_USER_SUMMARY,
+            description = UserSwaggerDocumentationMessage.UPDATE_USER_DESCRIPTION
+    )
+    public ResponseEntity<GlobalApiResponse> updateUser(@ModelAttribute UpdateUserRequest updateUserRequest) {
+        return successResponse(usersService.updateUser(updateUserRequest), SystemMessage.USER_UPDATED);
     }
 }
