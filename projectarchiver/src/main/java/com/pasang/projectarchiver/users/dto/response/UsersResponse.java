@@ -15,6 +15,7 @@ import java.util.List;
 public class UsersResponse {
     private Long userId;
     private String firstName;
+    private String lastName;
     private String email;
     private String phoneNumber;
     private String address;
@@ -24,7 +25,8 @@ public class UsersResponse {
 
     public UsersResponse(Users user) {
         this.userId = user.getId();
-        this.firstName = user.getFullName();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phoneNumber = user.getPhone();
         this.address = user.getAddress();
