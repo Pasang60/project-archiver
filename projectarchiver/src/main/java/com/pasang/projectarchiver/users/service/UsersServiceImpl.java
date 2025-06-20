@@ -40,7 +40,8 @@ public class UsersServiceImpl implements UsersService{
     public UsersResponse registerUser(UsersRegistrationRequest usersRegistrationRequest) {
         log.info("Registering user: {}", usersRegistrationRequest);
         Users user = new Users();
-        user.setFullName(usersRegistrationRequest.getFullName());
+        user.setFirstName(usersRegistrationRequest.getFirstName());
+        user.setLastName(usersRegistrationRequest.getLastName());
         user.setEmail(usersRegistrationRequest.getEmail());
         user.setPhone(usersRegistrationRequest.getPhone());
         user.setAddress(usersRegistrationRequest.getAddress());
@@ -59,7 +60,8 @@ public class UsersServiceImpl implements UsersService{
         log.info("User registered: {}", user);
 
         OTP otp = otpService.saveOTP(user, OTPPurpose.REGISTER);
-        mailService.sendOtpEmail(user.getEmail(), user.getFullName(), otp.getOtpValue(), otp.getExpiryTime());
+        String fullName = user.getFirstName()+" "+user.getLastName();
+        mailService.sendOtpEmail(user.getEmail(), fullName, otp.getOtpValue(), otp.getExpiryTime());
 
         log.info(UserLogMessage.USER_REQUEST_MAIL_SENT , user.getEmail());
 
@@ -108,7 +110,8 @@ public class UsersServiceImpl implements UsersService{
         Users user = usersRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException(UserExceptionMessage.USER_NOT_FOUND + userId)
         );
-        user.setFullName(updateUserRequest.getFullName());
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setLastName(updateUserRequest.getLastName());
         user.setEmail(updateUserRequest.getEmail());
         user.setPhone(updateUserRequest.getPhone());
         user.setAddress(updateUserRequest.getAddress());
@@ -116,5 +119,22 @@ public class UsersServiceImpl implements UsersService{
         usersRepository.save(user);
         log.info("User updated: {}", user);
         return new UsersResponse(user);
+    }
+
+    @Override
+    public UsersResponse getUserById() {
+    log.info("Fetching user by ID");
+    Long userId = loggedInUser.getLoggedInUser().getId();
+    Users user = usersRepository.findById(userId).orElseThrow(
+            () -> new EntityNotFoundException(UserExceptionMessage.USER_NOT_FOUND + userId)
+    );
+    log.info("User fetched: {}", user);
+    if (user != null) {
+        return new UsersResponse(user);
+    }
+    else {
+        log.warn("User not found with ID: {}", userId);
+        throw new EntityNotFoundException(UserExceptionMessage.USER_NOT_FOUND + userId);
+    }
     }
 }

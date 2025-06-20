@@ -18,4 +18,8 @@ public class RoleResponse {
         this.role = role.getName();
         this.description = role.getDescription();
     }
+
+    public RoleResponse(String name) {
+        this.role = name;
+    }
 }

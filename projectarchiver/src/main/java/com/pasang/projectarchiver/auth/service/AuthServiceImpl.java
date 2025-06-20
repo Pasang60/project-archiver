@@ -5,11 +5,14 @@ package com.pasang.projectarchiver.auth.service;
 
 import com.pasang.projectarchiver.auth.dto.request.AuthRequest;
 import com.pasang.projectarchiver.auth.dto.response.AuthResponse;
+import com.pasang.projectarchiver.auth.dto.response.UserResponse;
 import com.pasang.projectarchiver.auth.entity.Token;
 import com.pasang.projectarchiver.auth.repository.TokenRepository;
 import com.pasang.projectarchiver.constant.SystemMessage;
+import com.pasang.projectarchiver.role.entity.Role;
 import com.pasang.projectarchiver.security.JwtUtil;
 import com.pasang.projectarchiver.security.UserDetailsServiceImpl;
+import com.pasang.projectarchiver.users.dto.response.RoleResponse;
 import com.pasang.projectarchiver.users.entity.Users;
 import com.pasang.projectarchiver.users.repository.UsersRepository;
 import com.pasang.projectarchiver.utils.logged_in_user.LoggedInUser;
@@ -74,8 +77,22 @@ public class AuthServiceImpl implements AuthService {
             tokenRepository.save(token);
         }
 
+
+        // Populate UserResponse
+        UserResponse userResponse = new UserResponse();
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setRole(new RoleResponse(String.valueOf(user.getRole()))); // Single role
+
+        // Return AuthResponse
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setAccessToken(accessToken);
+        authResponse.setMessage(message);
+        authResponse.setUser(userResponse);
+
         log.info("User logged in: {}", user);
-        return new AuthResponse(accessToken, message);
+        return authResponse;
+
     }
 
     @Override

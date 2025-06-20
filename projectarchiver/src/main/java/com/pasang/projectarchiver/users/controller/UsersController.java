@@ -60,4 +60,13 @@ public class UsersController extends BaseController {
     public ResponseEntity<GlobalApiResponse> updateUser(@ModelAttribute UpdateUserRequest updateUserRequest) {
         return successResponse(usersService.updateUser(updateUserRequest), SystemMessage.USER_UPDATED);
     }
+
+    @GetMapping("/getById")
+    @Operation(
+            summary = UserSwaggerDocumentationMessage.GET_USER_BY_ID_SUMMARY,
+            description = UserSwaggerDocumentationMessage.GET_USER_BY_ID_DESCRIPTION
+    )
+    public ResponseEntity<GlobalApiResponse> getUserById() {
+        return successResponse(usersService.getUserById(), SystemMessage.USER_FETCHED);
+    }
 }

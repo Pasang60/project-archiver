@@ -3,6 +3,8 @@ package com.pasang.projectarchiver.users.message;
 public class UserSwaggerDocumentationMessage {
     public static final String UPDATE_USER_SUMMARY = "Update User";
     public static final String UPDATE_USER_DESCRIPTION = "Update the profile of the user";
+    public static final String GET_USER_BY_ID_SUMMARY = "Get User by ID";
+    public static final String GET_USER_BY_ID_DESCRIPTION = "Get the user details by user ID";
 
     private UserSwaggerDocumentationMessage() {}
 

@@ -37,7 +37,8 @@ public class InitDatabaseConfig {
         if(userRepository.findAll().isEmpty()) {
             log.info("Creating super admin role user");
             Users user = new Users();
-            user.setFullName("Super Admin");
+            user.setFirstName("Super");
+            user.setLastName("Admin");
             user.setEmail("admin@gmail.com");
             user.setPhone("9840757252");
             user.setAddress("Kathmandu, Nepal");

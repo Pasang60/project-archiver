@@ -24,8 +24,11 @@ public class Users extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "FULL_NAME")
-    private String fullName;
+    @Column(nullable = false, name = "FIRST_NAME")
+    private String firstName;
+
+    @Column(nullable = false, name = "LAST_NAME")
+    private String lastName;
 
     @Column(nullable = false, name = "EMAIL_ID", unique = true)
     private String email;

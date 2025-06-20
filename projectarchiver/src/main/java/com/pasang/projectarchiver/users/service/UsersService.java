@@ -14,4 +14,6 @@ public interface UsersService {
     String setPassword(PasswordRequest passwordRequest);
 
     UsersResponse updateUser(UpdateUserRequest updateUserRequest);
+
+    UsersResponse getUserById();
 }

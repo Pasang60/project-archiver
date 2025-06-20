@@ -11,8 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserRequest {
-    @NotEmpty(message = "User fullName must not be empty")
-    private String fullName;
+    @NotEmpty(message = "User firstName must not be empty")
+    private String firstName;
+
+    @NotEmpty(message = "User lastName must not be empty")
+    private String lastName;
 
     @NotEmpty(message = "User email must not be empty") // Neither null nor 0 size
     @Email(message = "Invalid email format")
