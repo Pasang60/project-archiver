@@ -6,6 +6,42 @@ import java.util.*;
 
 public class HuffmanUtil {
 
+    public static String decompress(String encodedData, String serializedTree) {
+        // Step 1: Deserialize tree
+        int[] index = {0};
+        Node root = deserializeTree(serializedTree, index);
+
+        // Step 2: Decode the encoded data
+        StringBuilder decoded = new StringBuilder();
+        Node current = root;
+        for (char bit : encodedData.toCharArray()) {
+            current = (bit == '0') ? current.left : current.right;
+
+            if (current.left == null && current.right == null) {
+                decoded.append(current.ch);
+                current = root;
+            }
+        }
+
+        return decoded.toString();
+    }
+
+    private static Node deserializeTree(String tree, int[] index) {
+        if (index[0] >= tree.length()) return null;
+
+        char flag = tree.charAt(index[0]++);
+        if (flag == '1') {
+            char ch = tree.charAt(index[0]++);
+            return new Node(ch, 0);
+        }
+
+        Node left = deserializeTree(tree, index);
+        Node right = deserializeTree(tree, index);
+        return new Node(0, left, right);
+    }
+
+
+
     static class Node {
         char ch;
         int freq;

@@ -12,6 +12,9 @@ spring:
     password: root
     driver-class-name: org.postgresql.Driver
 
+    hikari:
+      auto-commit: false
+
   jpa:
     show_sql: true
     hibernate:
@@ -23,7 +26,7 @@ application:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 
     access-token:
-      expiration: 900000 # 15 minutes
+      expiration: 86400000 # 1 day
 
     refresh-token:
       expiration: 86400000 # 1 day
@@ -45,3 +48,4 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /v1/swagger.html
+

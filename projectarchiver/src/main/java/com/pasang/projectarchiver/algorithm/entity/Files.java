@@ -1,5 +1,6 @@
 package com.pasang.projectarchiver.algorithm.entity;
 
+import com.pasang.projectarchiver.algorithm.util.HuffmanUtil;
 import com.pasang.projectarchiver.global.Auditable;
 import com.pasang.projectarchiver.users.entity.Users;
 import jakarta.persistence.*;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.nio.charset.StandardCharsets;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -20,12 +23,18 @@ public class Files extends Auditable {
     @Column(nullable = false)
     private String fileName;
 
+    @Column(nullable = false)
+    private String file;
+
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(nullable = false)
     private String encodedData;
 
     @Lob
-    private String huffmanTree; // Serialized Huffman tree for decoding
+    @Basic(fetch = FetchType.EAGER)
+    private String huffmanTree;
+
 
     @Column(nullable = false)
     private Long originalFileSize;
