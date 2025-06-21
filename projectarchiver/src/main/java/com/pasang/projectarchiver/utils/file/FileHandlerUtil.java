@@ -46,31 +46,33 @@ public class FileHandlerUtil {
 
         log.info("[FileHandlerUtil:saveFile] Saving file: {} to {}", uniqueFileName, fullPath);
 
-        String fileDimension = getFileDimension(file);
+        String fileDimension = null;
+        if (isImageFile(extension)) {
+            fileDimension = getFileDimension(file);
+        }
 
         try {
             Files.createDirectories(fullPath.getParent());
             file.transferTo(fullPath.toFile());
 
-            FileType fileType = determineFileType(originalFilename);
+            FileType fileType = determineFileType(extension);
             log.info("[FileHandlerUtil:saveFile] File saved at: {}", fullPath);
 
             return new FileSaveResponse(uniqueFileName, relativePath, fileType, fileDimension);
         } catch (IOException e) {
             log.error("[FileHandlerUtil:saveFile] Error saving file: {}", e.getMessage());
-            return new FileSaveResponse(uniqueFileName, relativePath, null, fileDimension);
+            throw new RuntimeException("Failed to save file", e);
         }
     }
 
-    public FileType determineFileType(String fileName) {
-        String extension = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase() : "";
+    public FileType determineFileType(String extension) {
         log.info("[FileHandlerUtil:determineFileType] File extension: {}", extension);
-        return switch (extension) {
+        return switch (extension.toLowerCase()) {
             case "png", "jpg", "jpeg", "gif", "bmp" -> FileType.IMAGE;
             case "pdf", "doc", "docx", "txt", "xls", "xlsx", "ppt", "pptx" -> FileType.DOCUMENT;
             case "mp4", "avi", "mkv", "mov" -> FileType.VIDEO;
             case "mp3", "wav", "aac" -> FileType.AUDIO;
-            default -> null;
+            default -> FileType.UNKNOWN;
         };
     }
 
@@ -84,13 +86,11 @@ public class FileHandlerUtil {
         }
     }
 
-    public void deleteFile(String path) {
-        try {
-            Files.delete(Path.of(path));
-            log.info("[FileHandlerUtil:deleteFile] File deleted successfully: {}", path);
-        } catch (IOException e) {
-            log.error("[FileHandlerUtil:deleteFile] Error deleting file: {}", e.getMessage());
-        }
+    private boolean isImageFile(String extension) {
+        return switch (extension.toLowerCase()) {
+            case "png", "jpg", "jpeg", "gif", "bmp" -> true;
+            default -> false;
+        };
     }
 
     private String cleanFileName(String name) {
@@ -112,4 +112,33 @@ public class FileHandlerUtil {
                 : fileName;
     }
 
+    public FileSaveResponse saveCompressedData(String compressedData, String fileName, String additionalPath) {
+        if (compressedData == null || compressedData.isBlank()) {
+            throw new IllegalArgumentException("Invalid compressed data");
+        }
+
+        String cleanedName = cleanFileName(fileName);
+        String uniqueFileName = cleanedName + "-" + System.currentTimeMillis() + ".compressed";
+
+        // Prepare relative and full path
+        String relativePath = (additionalPath != null && !additionalPath.isBlank())
+                ? additionalPath + "/" + uniqueFileName
+                : uniqueFileName;
+        String basePath = fileConfig.getFilePath();
+        Path fullPath = Paths.get(basePath, relativePath);
+
+        log.info("[FileHandlerUtil:saveCompressedData] Saving compressed file: {} to {}", uniqueFileName, fullPath);
+
+        try {
+            Files.createDirectories(fullPath.getParent());
+            Files.writeString(fullPath, compressedData);
+
+            log.info("[FileHandlerUtil:saveCompressedData] Compressed file saved at: {}", fullPath);
+
+            return new FileSaveResponse(uniqueFileName, relativePath, FileType.DOCUMENT, null);
+        } catch (IOException e) {
+            log.error("[FileHandlerUtil:saveCompressedData] Error saving compressed file: {}", e.getMessage());
+            throw new RuntimeException("Failed to save compressed file", e);
+        }
+    }
 }

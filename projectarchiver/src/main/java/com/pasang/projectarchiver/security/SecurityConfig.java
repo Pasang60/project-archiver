@@ -50,10 +50,12 @@ public class SecurityConfig {
                             "api/v1/users/validate",
                             "api/v1/users/set-password"
                     ).permitAll();
+//                    auth.requestMatchers("/api/v1/algorithm/download/**").permitAll();
                     auth.requestMatchers("/api/v1/**").authenticated();
                 })
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers(headers -> headers.xssProtection(xss -> xss.disable()))
                 .build();
     }
 
