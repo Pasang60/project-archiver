@@ -17,6 +17,7 @@ import com.pasang.projectarchiver.users.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -69,4 +70,13 @@ public class UsersController extends BaseController {
     public ResponseEntity<GlobalApiResponse> getUserById() {
         return successResponse(usersService.getUserById(), SystemMessage.USER_FETCHED);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @Operation(summary = "Get the count of Archived Files",
+    description = "Fetch the count of verified users in the system")
+    @GetMapping("/getVerifiedUsersCount")
+    public ResponseEntity<GlobalApiResponse> getVerifiedUsersCount() {
+        return successResponse(usersService.getVerifiedUsersCount(), "Count of verified users retrieved successfully");
+    }
+
 }

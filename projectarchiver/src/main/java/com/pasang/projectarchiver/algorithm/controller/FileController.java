@@ -9,9 +9,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -39,11 +41,45 @@ public class FileController extends BaseController {
         return fileService.downloadDecompressedFile(fileId);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Get the count of Archived Files")
     @GetMapping("/archived-files/count")
     public ResponseEntity<GlobalApiResponse> getArchivedFilesCount() {
         return successResponse(fileService.getArchivedFilesCount(), "Count of archived files retrieved successfully");
     }
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @Operation(summary = "Get the count of Archived Files for users")
+    @GetMapping("/user/archived-count")
+    public ResponseEntity<GlobalApiResponse> getUserArchivedFilesCount() {
+        return successResponse(fileService.getUserArchivedFilesCount(), "Count of archived files for user retrieved successfully");
+    }
+
+    @PostMapping("/deflate/compress")
+    @Operation(summary = "Compress file using Deflate algorithm")
+    public ResponseEntity<GlobalApiResponse> compressFileUsingDeflate(@ModelAttribute FileRequest fileRequest) {
+        return successResponse(
+                fileService.compressAndSaveFile(fileRequest),
+                "File compressed using Deflate algorithm and saved successfully"
+        );
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @Operation(summary = "Get all archived files for the user",
+            description = "Fetch all archived files for the admin")
+    @GetMapping("/getAll")
+    public ResponseEntity<GlobalApiResponse> getAllArchivedFiles(Pageable pageable) {
+        return successResponse(fileService.getAllArchivedFiles(pageable), "All archived files fetched successfully");
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @Operation(summary = "Get all archived files for the user",
+            description = "Fetch all archived files for the currently logged-in user")
+    @GetMapping("/user/getAll")
+    public ResponseEntity<GlobalApiResponse> getUserArchivedFiles(Pageable pageable) {
+        return successResponse(fileService.getUserArchivedFiles(pageable), "All archived files for user fetched successfully");
+    }
+
 
 
 

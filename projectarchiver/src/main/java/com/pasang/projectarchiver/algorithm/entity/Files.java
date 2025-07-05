@@ -35,12 +35,11 @@ public class Files extends Auditable {
     @Basic(fetch = FetchType.EAGER)
     private String huffmanTree;
 
+    @Column(nullable = false)
+    private String originalFileSize;
 
     @Column(nullable = false)
-    private Long originalFileSize;
-
-    @Column(nullable = false)
-    private Long compressedFileSize;
+    private String compressedFileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -16,4 +16,6 @@ public interface UsersService {
     UsersResponse updateUser(UpdateUserRequest updateUserRequest);
 
     UsersResponse getUserById();
+
+    Long getVerifiedUsersCount();
 }

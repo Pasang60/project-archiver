@@ -1,5 +1,6 @@
 package com.pasang.projectarchiver.algorithm.service;
 
+import com.pasang.projectarchiver.algorithm.dto.CompressResponse;
 import com.pasang.projectarchiver.algorithm.dto.FileRequest;
 import com.pasang.projectarchiver.algorithm.dto.FileResponse;
 import com.pasang.projectarchiver.algorithm.entity.Files;
@@ -13,12 +14,12 @@ import com.pasang.projectarchiver.utils.logged_in_user.LoggedInUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -30,6 +31,18 @@ public class FileServiceImpl implements FileService {
     private final LoggedInUser loggedInUser;
     private final UsersRepository usersRepository;
 
+
+    private String formatFileSize(long sizeInBytes) {
+        if (sizeInBytes < 1024) {
+            return sizeInBytes + " Bytes";
+        } else if (sizeInBytes < 1024 * 1024) {
+            return (sizeInBytes / 1024) + " KB";
+        } else if (sizeInBytes < 1024 * 1024 * 1024) {
+            return (sizeInBytes / (1024 * 1024)) + " MB";
+        } else {
+            return (sizeInBytes / (1024 * 1024 * 1024)) + " GB";
+        }
+    }
     @Override
     public FileResponse compressAndSaveFile(FileRequest fileRequest) {
         try {
@@ -53,8 +66,10 @@ public class FileServiceImpl implements FileService {
             files.setFile(fileSaveResponse.getFileDownloadUri());
             files.setEncodedData(result.encodedData);
             files.setHuffmanTree(result.huffmanTree);
-            files.setOriginalFileSize((long) result.originalSize);
-            files.setCompressedFileSize((long) result.compressedSize);
+
+            // Format file sizes
+            files.setOriginalFileSize(formatFileSize(fileRequest.getFile().getBytes().length));
+            files.setCompressedFileSize(formatFileSize(result.compressedSize));
 
             Long userId = loggedInUser.getLoggedInUser().getId();
             Users user = usersRepository.findById(userId)
@@ -119,13 +134,52 @@ public class FileServiceImpl implements FileService {
         log.info("Fetching count of archived files");
         Long count = filesRepository.countByCompressedFileSizeNotNull();
         log.info("Count of archived files: {}", count);
-        if (count != null) {
             return count;
-        }
-        else {
-            log.warn("No archived files found");
-            throw new RuntimeException("No archived files found");
-        }
+
+    }
+
+    @Override
+    public Long getUserArchivedFilesCount() {
+        log.info("Fetching count of archived files for user: {}", loggedInUser.getLoggedInUser().getId());
+        Long userId = loggedInUser.getLoggedInUser().getId();
+        Long count = filesRepository.countByUserId(userId);
+        log.info("Count of archived files for user {}: {}", userId, count);
+        return count;
+    }
+
+    @Override
+    public Page<CompressResponse> getAllArchivedFiles(Pageable pageable) {
+        log.info("Fetching all archived files");
+
+        Page<Files> archivedFiles = filesRepository.findByCompressedFileSizeNotNull(pageable);
+
+        return archivedFiles.map(file -> new CompressResponse(
+                file.getId(),
+                file.getFileName(),
+                file.getOriginalFileSize(),
+                file.getCompressedFileSize(),
+                calculateCompressionPercentage(file.getOriginalFileSize(), file.getCompressedFileSize())
+        ));
+    }
+
+    @Override
+    public Page<CompressResponse> getUserArchivedFiles(Pageable pageable) {
+        log.info("Fetching archived files for user: {}", loggedInUser.getLoggedInUser().getId());
+        Long userId = loggedInUser.getLoggedInUser().getId();
+        Page<Files> archivedFiles = filesRepository.findByUserIdAndCompressedFileSizeNotNull(userId, pageable);
+        return archivedFiles.map(file -> new CompressResponse(
+                file.getId(),
+                file.getFileName(),
+                file.getOriginalFileSize(),
+                file.getCompressedFileSize(),
+                calculateCompressionPercentage(file.getOriginalFileSize(), file.getCompressedFileSize())
+        ));
+    }
+
+    private Long calculateCompressionPercentage(String originalSize, String compressedSize) {
+        long original = Long.parseLong(originalSize.split(" ")[0]);
+        long compressed = Long.parseLong(compressedSize.split(" ")[0]);
+        return ((original - compressed) * 100) / original;
     }
 
 
