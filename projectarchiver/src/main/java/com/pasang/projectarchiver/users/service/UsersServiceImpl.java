@@ -137,4 +137,12 @@ public class UsersServiceImpl implements UsersService{
         throw new EntityNotFoundException(UserExceptionMessage.USER_NOT_FOUND + userId);
     }
     }
+
+    @Override
+    public Long getVerifiedUsersCount() {
+        log.info("Fetching count of verified users");
+        Long count = usersRepository.countUsersByIsVerified(true);
+        log.info("Count of verified users: {}", count);
+        return count;
+    }
 }
