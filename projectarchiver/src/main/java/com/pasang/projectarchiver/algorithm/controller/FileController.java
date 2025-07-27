@@ -68,17 +68,18 @@ public class FileController extends BaseController {
     @Operation(summary = "Get all archived files for the user",
             description = "Fetch all archived files for the admin")
     @GetMapping("/getAll")
-    public ResponseEntity<GlobalApiResponse> getAllArchivedFiles(Pageable pageable) {
-        return successResponse(fileService.getAllArchivedFiles(pageable), "All archived files fetched successfully");
+    public ResponseEntity<GlobalApiResponse> getAllArchivedFiles() {
+        return successResponse(fileService.getAllArchivedFiles(), "All archived files fetched successfully");
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @Operation(summary = "Get all archived files for the user",
             description = "Fetch all archived files for the currently logged-in user")
     @GetMapping("/user/getAll")
-    public ResponseEntity<GlobalApiResponse> getUserArchivedFiles(Pageable pageable) {
-        return successResponse(fileService.getUserArchivedFiles(pageable), "All archived files for user fetched successfully");
+    public ResponseEntity<GlobalApiResponse> getUserArchivedFiles() {
+        return successResponse(fileService.getUserArchivedFiles(), "All archived files for user fetched successfully");
     }
+
 
 
 

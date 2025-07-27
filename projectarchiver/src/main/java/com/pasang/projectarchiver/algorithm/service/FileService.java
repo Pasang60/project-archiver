@@ -7,6 +7,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface FileService {
     FileResponse compressAndSaveFile(FileRequest fileRequest);
 
@@ -16,7 +19,7 @@ public interface FileService {
 
     Long getUserArchivedFilesCount();
 
-    Page<CompressResponse> getAllArchivedFiles(Pageable pageable);
+    List<CompressResponse> getAllArchivedFiles();
 
-    Page<CompressResponse> getUserArchivedFiles(Pageable pageable);
+    List<CompressResponse> getUserArchivedFiles();
 }
