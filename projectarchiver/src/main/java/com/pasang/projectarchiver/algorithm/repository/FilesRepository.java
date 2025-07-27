@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,7 +17,7 @@ public interface FilesRepository extends JpaRepository<Files,Long> {
 
     Long countByUserId(Long userId);
 
-    Page<Files> findByCompressedFileSizeNotNull(Pageable pageable);
+    List<Files> findByCompressedFileSizeNotNull();
 
-    Page<Files> findByUserIdAndCompressedFileSizeNotNull(Long userId, Pageable pageable);
+    List<Files> findByUserIdAndCompressedFileSizeNotNull(Long userId);
 }

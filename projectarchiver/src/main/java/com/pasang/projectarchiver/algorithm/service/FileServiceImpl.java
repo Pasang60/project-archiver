@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -148,39 +149,28 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Page<CompressResponse> getAllArchivedFiles(Pageable pageable) {
+    public List<CompressResponse> getAllArchivedFiles() {
         log.info("Fetching all archived files");
 
-        Page<Files> archivedFiles = filesRepository.findByCompressedFileSizeNotNull(pageable);
+        List<Files> archivedFiles = filesRepository.findByCompressedFileSizeNotNull();
 
-        return archivedFiles.map(file -> new CompressResponse(
-                file.getId(),
-                file.getFileName(),
-                file.getOriginalFileSize(),
-                file.getCompressedFileSize(),
-                calculateCompressionPercentage(file.getOriginalFileSize(), file.getCompressedFileSize())
-        ));
+        return archivedFiles.stream()
+                .map(CompressResponse::new)
+                .toList();
     }
 
     @Override
-    public Page<CompressResponse> getUserArchivedFiles(Pageable pageable) {
+    public List<CompressResponse> getUserArchivedFiles() {
         log.info("Fetching archived files for user: {}", loggedInUser.getLoggedInUser().getId());
         Long userId = loggedInUser.getLoggedInUser().getId();
-        Page<Files> archivedFiles = filesRepository.findByUserIdAndCompressedFileSizeNotNull(userId, pageable);
-        return archivedFiles.map(file -> new CompressResponse(
-                file.getId(),
-                file.getFileName(),
-                file.getOriginalFileSize(),
-                file.getCompressedFileSize(),
-                calculateCompressionPercentage(file.getOriginalFileSize(), file.getCompressedFileSize())
-        ));
+        List<Files> archivedFiles = filesRepository.findByUserIdAndCompressedFileSizeNotNull(userId);
+        return archivedFiles.stream()
+                .map(CompressResponse::new)
+                .toList();
+
     }
 
-    private Long calculateCompressionPercentage(String originalSize, String compressedSize) {
-        long original = Long.parseLong(originalSize.split(" ")[0]);
-        long compressed = Long.parseLong(compressedSize.split(" ")[0]);
-        return ((original - compressed) * 100) / original;
-    }
+
 
 
 }
