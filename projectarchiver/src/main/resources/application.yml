@@ -3,6 +3,11 @@ server:
   address: 0.0.0.0
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+      enabled: true
   application:
     name: projectarchiver
 
@@ -48,4 +53,5 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /v1/swagger.html
+
 

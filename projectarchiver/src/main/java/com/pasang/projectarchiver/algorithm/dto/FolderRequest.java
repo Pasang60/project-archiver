@@ -10,9 +10,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileRequest {
-    private String fileName;
-//    private MultipartFile file;
-private List<MultipartFile> file;
-    private String description;
-}
+public class FolderRequest {
+
+        private String fileName;
+        private String description;
+        private List<MultipartFile> file;
+    }
