@@ -1,6 +1,7 @@
 package com.pasang.projectarchiver.algorithm.repository;
 
 import com.pasang.projectarchiver.algorithm.entity.Files;
+import com.pasang.projectarchiver.algorithm.entity.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,5 @@ public interface FilesRepository extends JpaRepository<Files,Long> {
 
     List<Files> findByCompressedFileSizeNotNull();
 
-    List<Files> findByUserIdAndCompressedFileSizeNotNull(Long userId);
+    List<Files> findByUserIdAndCompressedFileSizeNotNullAndStatus(Long userId, Status status);
 }
